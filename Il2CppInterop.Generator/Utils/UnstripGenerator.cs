@@ -20,13 +20,13 @@ public static class UnstripGenerator
 
         var constructor = new MethodDefinition(".ctor",
             MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RuntimeSpecialName |
-            MethodAttributes.Public, MethodSignature.CreateInstance(imports.Module.Void(), imports.Module.Object(), imports.Module.IntPtr()));
+            MethodAttributes.Public, Sigs.Instance(imports.Module.Void(), imports.Module.Object(), imports.Module.IntPtr()));
         constructor.ImplAttributes = MethodImplAttributes.CodeTypeMask;
         delegateType.Methods.Add(constructor);
 
         var invokeMethod = new MethodDefinition("Invoke",
             MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.Public,
-            MethodSignature.CreateInstance(imports.Module.Void())); // todo
+            Sigs.Instance(imports.Module.Void())); // todo
         invokeMethod.ImplAttributes = MethodImplAttributes.CodeTypeMask;
         delegateType.Methods.Add(invokeMethod);
 

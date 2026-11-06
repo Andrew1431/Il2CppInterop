@@ -69,11 +69,11 @@ public class TypeRewriteContext
     {
         if (NewType.HasGenericParameters())
         {
-            var genericInstanceType = new GenericInstanceTypeSignature(NewType, NewType.IsValueType());
+            var genericInstanceType = Sigs.GenericInst(NewType, NewType.IsValueType());
             foreach (var newTypeGenericParameter in NewType.GenericParameters)
                 genericInstanceType.TypeArguments.Add(newTypeGenericParameter.ToTypeSignature());
             SelfSubstitutedRef = NewType.DeclaringModule!.DefaultImporter.ImportTypeSignature(genericInstanceType).ToTypeDefOrRef();
-            var genericTypeRef = new GenericInstanceTypeSignature(
+            var genericTypeRef = Sigs.GenericInst(
                 AssemblyContext.Imports.Il2CppClassPointerStore.ToTypeDefOrRef(),
                 AssemblyContext.Imports.Il2CppClassPointerStore.IsValueType(),
                 SelfSubstitutedRef.ToTypeSignature());
@@ -83,7 +83,7 @@ public class TypeRewriteContext
         else
         {
             SelfSubstitutedRef = NewType;
-            var genericTypeRef = new GenericInstanceTypeSignature(
+            var genericTypeRef = Sigs.GenericInst(
                 AssemblyContext.Imports.Il2CppClassPointerStore.ToTypeDefOrRef(),
                 AssemblyContext.Imports.Il2CppClassPointerStore.IsValueType());
             if (OriginalType.ToTypeSignature().IsPrimitive() || OriginalType.FullName == "System.String")

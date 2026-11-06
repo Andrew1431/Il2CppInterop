@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using AsmResolver.DotNet;
 using AsmResolver.DotNet.Cloning;
 using AsmResolver.DotNet.Signatures;
@@ -55,7 +55,7 @@ public static class Pass61ImplementAwaiters
                 }
 
                 var onCompletedAttr = MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual;
-                var sig = MethodSignature.CreateInstance(voidRef, [actionUntypedRef.Value.ToTypeSignature()]);
+                var sig = Sigs.Instance(voidRef, [actionUntypedRef.Value.ToTypeSignature()]);
 
                 var proxyOnCompleted = new MethodDefinition(nameof(INotifyCompletion.OnCompleted), onCompletedAttr, sig);
                 var parameter = proxyOnCompleted.Parameters[0].GetOrCreateDefinition();

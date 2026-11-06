@@ -1,4 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
+// ReSharper disable InconsistentNaming
 
 using AsmResolver.DotNet;
 using AsmResolver.DotNet.Signatures;
@@ -173,7 +173,7 @@ public class RuntimeAssemblyReferences
         {
             var owner = ResolveType("Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<T>");
             var gp = new GenericParameterSignature(GenericParameterType.Type, 0);
-            var giOwner = new GenericInstanceTypeSignature(owner.ToTypeDefOrRef(), false);
+            var giOwner = Sigs.GenericInst(owner.ToTypeDefOrRef(), false);
             giOwner.TypeArguments.Add(param);
             var mr = ReferenceCreator.CreateInstanceMethodReference(".ctor", ResolveType("System.Void"),
                 giOwner.ToTypeDefOrRef());
@@ -185,7 +185,7 @@ public class RuntimeAssemblyReferences
         Il2CppRefrenceArrayctor_size = new((param) =>
         {
             var owner = ResolveType("Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<T>");
-            var giOwner = new GenericInstanceTypeSignature(owner.ToTypeDefOrRef(), false);
+            var giOwner = Sigs.GenericInst(owner.ToTypeDefOrRef(), false);
             giOwner.TypeArguments.Add(param);
             var mr = ReferenceCreator.CreateInstanceMethodReference(".ctor", ResolveType("System.Void"),
                     giOwner.ToTypeDefOrRef(), ResolveType("System.Int64"));
@@ -266,7 +266,7 @@ public class RuntimeAssemblyReferences
         Il2CppObjectBase_Cast = new Lazy<IMethodDefOrRef>(() =>
         {
             var gp0 = new GenericParameterSignature(GenericParameterType.Method, 0);
-            var signature = MethodSignature.CreateInstance(gp0, 1);
+            var signature = Sigs.Instance(gp0, 1);
             var mr = new MemberReference(ResolveType("Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase").ToTypeDefOrRef(), "Cast", signature);
             return mr;
         });
@@ -274,7 +274,7 @@ public class RuntimeAssemblyReferences
         Il2CppObjectBase_TryCast = new Lazy<IMethodDefOrRef>(() =>
         {
             var gp0 = new GenericParameterSignature(GenericParameterType.Method, 0);
-            var signature = MethodSignature.CreateInstance(gp0, 1);
+            var signature = Sigs.Instance(gp0, 1);
             var mr = new MemberReference(ResolveType("Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase").ToTypeDefOrRef(), "TryCast", signature);
             return mr;
         });
@@ -282,7 +282,7 @@ public class RuntimeAssemblyReferences
         Il2CppObjectPool_Get = new Lazy<IMethodDefOrRef>(() =>
         {
             var gp0 = new GenericParameterSignature(GenericParameterType.Method, 0);
-            var signature = MethodSignature.CreateStatic(gp0, 1, ResolveType("System.IntPtr"));
+            var signature = Sigs.Static(gp0, 1, ResolveType("System.IntPtr"));
             var mr = new MemberReference(ResolveType("Il2CppInterop.Runtime.Runtime.Il2CppObjectPool").ToTypeDefOrRef(), "Get", signature);
             return mr;
         });
@@ -290,7 +290,7 @@ public class RuntimeAssemblyReferences
         IL2CPP_ResolveICall = new Lazy<IMethodDefOrRef>(() =>
         {
             var gp0 = new GenericParameterSignature(GenericParameterType.Method, 0);
-            var signature = MethodSignature.CreateStatic(gp0, 1, ResolveType("System.String"));
+            var signature = Sigs.Static(gp0, 1, ResolveType("System.String"));
             var mr = new MemberReference(ResolveType("Il2CppInterop.Runtime.IL2CPP").ToTypeDefOrRef(), "ResolveICall", signature);
             return mr;
         });
@@ -467,7 +467,7 @@ public class RuntimeAssemblyReferences
         IL2CPP_PointerToValueGeneric = new Lazy<IMethodDefOrRef>(() =>
         {
             var gp0 = new GenericParameterSignature(GenericParameterType.Method, 0);
-            var signature = MethodSignature.CreateStatic(gp0, 1, ResolveType("System.IntPtr"), ResolveType("System.Boolean"), ResolveType("System.Boolean"));
+            var signature = Sigs.Static(gp0, 1, ResolveType("System.IntPtr"), ResolveType("System.Boolean"), ResolveType("System.Boolean"));
             var mr = new MemberReference(ResolveType("Il2CppInterop.Runtime.IL2CPP").ToTypeDefOrRef(), "PointerToValueGeneric", signature);
             return mr;
         });
@@ -475,7 +475,7 @@ public class RuntimeAssemblyReferences
         IL2CPP_RenderTypeName = new Lazy<IMethodDefOrRef>(() =>
         {
             var gp0 = new GenericParameterSignature(GenericParameterType.Method, 0);
-            var signature = MethodSignature.CreateStatic(ResolveType("System.String"), 1, ResolveType("System.Boolean"));
+            var signature = Sigs.Static(ResolveType("System.String"), 1, ResolveType("System.Boolean"));
             var mr = new MemberReference(ResolveType("Il2CppInterop.Runtime.IL2CPP").ToTypeDefOrRef(), "RenderTypeName", signature);
             return mr;
         });
@@ -508,7 +508,7 @@ public class RuntimeAssemblyReferences
             var declaringTypeRef = RuntimeReflectionHelper;
             var returnTypeRef = Module.DefaultImporter.ImportType(globalCtx.GetAssemblyByName("mscorlib").NewAssembly.ManifestModule!
                 .GetType("Il2CppSystem.RuntimeTypeHandle"));
-            var signature = MethodSignature.CreateStatic(returnTypeRef.ToTypeSignature(), 1);
+            var signature = Sigs.Static(returnTypeRef.ToTypeSignature(), 1);
             var methodReference = new MemberReference(declaringTypeRef.ToTypeDefOrRef(), "GetRuntimeTypeHandle", signature);
             return Module.DefaultImporter.ImportMethod(methodReference);
         });

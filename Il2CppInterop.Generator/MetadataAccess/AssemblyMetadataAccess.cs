@@ -5,14 +5,14 @@ namespace Il2CppInterop.Generator.MetadataAccess;
 
 public class AssemblyMetadataAccess : IIl2CppMetadataAccess
 {
-    private readonly Il2CppAssemblyResolver myAssemblyResolver = new();
+    private readonly RuntimeContext myContext = Il2CppAssemblyResolver.NewContext();
     private readonly List<AssemblyDefinition> myAssemblies = new();
     private readonly Dictionary<string, AssemblyDefinition> myAssembliesByName = new();
     private readonly Dictionary<(string AssemblyName, string TypeName), TypeDefinition> myTypesByName = new();
 
     public AssemblyMetadataAccess(IEnumerable<string> assemblyPaths)
     {
-        Load(assemblyPaths.Select(AssemblyDefinition.FromFile));
+        Load(assemblyPaths.Select(path => myContext.LoadAssembly(path)));
     }
 
     public AssemblyMetadataAccess(IEnumerable<AssemblyDefinition> assemblies)
@@ -24,7 +24,6 @@ public class AssemblyMetadataAccess : IIl2CppMetadataAccess
 
     public void Dispose()
     {
-        myAssemblyResolver.ClearCache();
         myAssemblies.Clear();
         myAssembliesByName.Clear();
     }
@@ -62,8 +61,7 @@ public class AssemblyMetadataAccess : IIl2CppMetadataAccess
         {
             myAssemblies.Add(sourceAssembly);
             myAssembliesByName[sourceAssembly.Name!] = sourceAssembly;
-            sourceAssembly.ManifestModule!.MetadataResolver = new DefaultMetadataResolver(myAssemblyResolver);
-            myAssemblyResolver.AddToCache(sourceAssembly);
+            if (sourceAssembly.RuntimeContext is null) myContext.AddAssembly(sourceAssembly);
         }
 
         foreach (var sourceAssembly in myAssemblies)

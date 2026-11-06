@@ -55,8 +55,8 @@ public class MethodRewriteContext
 
         var newAttributes = AdjustAttributes(originalMethod.Attributes, originalMethod.Name == "Finalize");
         var newSignature = (newAttributes & MethodAttributes.Static) != 0
-            ? MethodSignature.CreateStatic(declaringType.AssemblyContext.Imports.Module.Void(), originalMethod.GenericParameters.Count)
-            : MethodSignature.CreateInstance(declaringType.AssemblyContext.Imports.Module.Void(), originalMethod.GenericParameters.Count);
+            ? Sigs.Static(declaringType.AssemblyContext.Imports.Module.Void(), originalMethod.GenericParameters.Count)
+            : Sigs.Instance(declaringType.AssemblyContext.Imports.Module.Void(), originalMethod.GenericParameters.Count);
         var newMethod = new MethodDefinition("", newAttributes, newSignature);
         newMethod.CilMethodBody = new();
         NewMethod = newMethod;
@@ -129,8 +129,8 @@ public class MethodRewriteContext
             DeclaringType.NewType.NestedTypes.Add(genericMethodInfoStoreType);
             GenericInstantiationsStore = genericMethodInfoStoreType;
 
-            var selfSubstRef = new GenericInstanceTypeSignature(genericMethodInfoStoreType, false);
-            var selfSubstMethodRef = new GenericInstanceTypeSignature(genericMethodInfoStoreType, false);
+            var selfSubstRef = Sigs.GenericInst(genericMethodInfoStoreType, false);
+            var selfSubstMethodRef = Sigs.GenericInst(genericMethodInfoStoreType, false);
 
             for (var index = 0; index < genericParams.Count; index++)
             {

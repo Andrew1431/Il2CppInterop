@@ -212,8 +212,8 @@ public static class UnstripTranslator
                     return false;
 
                 var newMethodSignature = methodArg.Signature!.HasThis
-                    ? MethodSignature.CreateInstance(newReturnType, methodArg.Signature.GenericParameterCount)
-                    : MethodSignature.CreateStatic(newReturnType, methodArg.Signature.GenericParameterCount);
+                    ? Sigs.Instance(newReturnType, methodArg.Signature.GenericParameterCount)
+                    : Sigs.Static(newReturnType, methodArg.Signature.GenericParameterCount);
                 foreach (var methodArgParameter in methodArg.Signature.ParameterTypes)
                 {
                     var newParamType = Pass80UnstripMethods.ResolveTypeInNewAssemblies(globalContext,

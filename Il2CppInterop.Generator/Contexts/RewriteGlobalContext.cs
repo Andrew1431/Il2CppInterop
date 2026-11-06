@@ -28,7 +28,7 @@ public class RewriteGlobalContext : IDisposable
         GameAssemblies = gameAssemblies;
         UnityAssemblies = unityAssemblies;
 
-        Il2CppAssemblyResolver assemblyResolver = new();
+        var newAssemblyContext = Il2CppAssemblyResolver.NewContext(CorlibReferences.TargetCorlib);
 
         foreach (var sourceAssembly in gameAssemblies.Assemblies)
         {
@@ -41,9 +41,7 @@ public class RewriteGlobalContext : IDisposable
             var newAssembly = new AssemblyDefinition(sourceAssembly.Name.UnSystemify(options), sourceAssembly.Version);
             var newModule = new ModuleDefinition(sourceAssembly.ManifestModule?.Name.UnSystemify(options), CorlibReferences.TargetCorlib);
             newAssembly.Modules.Add(newModule);
-
-            newModule.MetadataResolver = new DefaultMetadataResolver(assemblyResolver);
-            assemblyResolver.AddToCache(newAssembly);
+            newAssemblyContext.AddAssembly(newAssembly);
 
             var assemblyRewriteContext = new AssemblyRewriteContext(this, sourceAssembly, newAssembly);
             AddAssemblyContext(assemblyName, assemblyRewriteContext);
