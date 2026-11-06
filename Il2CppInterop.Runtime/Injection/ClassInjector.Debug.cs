@@ -83,7 +83,7 @@ public unsafe partial class ClassInjector
         Logger.Instance.LogDebug(" ImplementedInterfaces ({InterfaceCount}):", classStruct.InterfaceCount);
         for (var i = 0; i < classStruct.InterfaceCount; i++)
         {
-            var @interface = UnityVersionHandler.Wrap(classStruct.ImplementedInterfaces[i]);
+            var @interface = UnityVersionHandler.Wrap(classStruct.ImplementedInterfaces != null ? classStruct.ImplementedInterfaces[i] : classStruct.InterfaceOffsets[i].interfaceType);
 
             Logger.Instance.LogDebug("  [{I}] {Name}", i, Marshal.PtrToStringUTF8(@interface.Name));
         }

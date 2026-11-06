@@ -488,7 +488,9 @@ public static unsafe partial class ClassInjector
         classPointer.InterfaceCount = (ushort)interfaceCount;
         classPointer.ImplementedInterfaces = (Il2CppClass**)Marshal.AllocHGlobal(interfaceCount * IntPtr.Size);
         for (var i = 0; i < baseClassPointer.InterfaceCount; i++)
-            classPointer.ImplementedInterfaces[i] = baseClassPointer.ImplementedInterfaces[i];
+            classPointer.ImplementedInterfaces[i] = baseClassPointer.ImplementedInterfaces != null
+                ? baseClassPointer.ImplementedInterfaces[i]
+                : baseClassPointer.InterfaceOffsets[i].interfaceType; // Unity 6000.6+ has no separate array
         for (int i = baseClassPointer.InterfaceCount; i < interfaceCount; i++)
             classPointer.ImplementedInterfaces[i] = interfaces[i - baseClassPointer.InterfaceCount].ClassPointer;
 
